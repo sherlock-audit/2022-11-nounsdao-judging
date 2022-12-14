@@ -39,12 +39,20 @@ Consdier changing to:
 balance = elapsedTime_ * tokenAmount_ / duration
 ```
 
+## Discussion
+
+**eladmallel**
+
+Fix PR: https://github.com/nounsDAO/streamer/pull/7
+
+
+
 # Issue M-2: Lack of sanity check for `stoptime` 
 
 Source: https://github.com/sherlock-audit/2022-11-nounsdao-judging/issues/66 
 
 ## Found by 
-pashov, rvierdiiev, ctf\_sec, chainNue, hansfriese, jonatascm, csanuragjain, WATCHPUG
+hansfriese, jonatascm, rvierdiiev, WATCHPUG, pashov, ctf\_sec, csanuragjain, chainNue
 
 ## Summary
 
@@ -104,6 +112,14 @@ function createStream(
     }
 ```
 
+## Discussion
+
+**eladmallel**
+
+Fix PR: https://github.com/nounsDAO/streamer/pull/8
+
+
+
 # Issue M-3: The rather harsh requirement of `tokenAmount` makes it inapplicable for certain tokens 
 
 Source: https://github.com/sherlock-audit/2022-11-nounsdao-judging/issues/63 
@@ -139,12 +155,20 @@ Manual Review
 
 Consider changing to `tokenAmount * RATE_DECIMALS_MULTIPLIER >= stopTime - startTime`.
 
+## Discussion
+
+**eladmallel**
+
+Fix PR: https://github.com/nounsDAO/streamer/pull/12
+
+
+
 # Issue M-4: Two address tokens can be withdrawn by the payer even when the stream has began 
 
 Source: https://github.com/sherlock-audit/2022-11-nounsdao-judging/issues/52 
 
 ## Found by 
-hansfriese, pashov, rvierdiiev, DecorativePineapple
+DecorativePineapple, hansfriese, pashov, rvierdiiev
 
 ## Summary
 It has been identified that if a stream has begun with a two address token the payer can withdraw the full amount via the [`rescueERC20`](https://github.com/sherlock-audit/2022-11-nounsdao/blob/main/src/Stream.sol#L268-L272) function.
@@ -176,7 +200,7 @@ Replace the address check with a balance check - record the balance of the token
 Source: https://github.com/sherlock-audit/2022-11-nounsdao-judging/issues/47 
 
 ## Found by 
-KingNFT
+KingNFT, rvierdiiev
 
 ## Summary
 The ````Stream```` contract instances can receive ETH but can not withdraw, ETH occasionally sent by users will be stuck in those contracts.
@@ -225,12 +249,20 @@ Manual Review
 ## Recommendation
 Add a ````rescueETH()```` function which is similar with the existing ````rescueERC20()````
 
+## Discussion
+
+**eladmallel**
+
+Fix PR: https://github.com/nounsDAO/streamer/pull/10
+
+
+
 # Issue M-6: If the recipient is added to the USDC blacklist, then cancel() does not work 
 
 Source: https://github.com/sherlock-audit/2022-11-nounsdao-judging/issues/37 
 
 ## Found by 
-Zarf, cccz, bin2chen, joestakey
+Zarf, joestakey, cccz, bin2chen
 
 ## Summary
 cancel() will send the vested USDC to the recipient, if the recipient is added to the USDC blacklist, then cancel() will not work
@@ -269,7 +301,7 @@ Instead of sending tokens directly to the payer or recipient in cancel(), consid
 Source: https://github.com/sherlock-audit/2022-11-nounsdao-judging/issues/28 
 
 ## Found by 
-0xZakk, rvierdiiev, obront, adriro, dic0de, neko\_nyaa, WATCHPUG, cccz, dipp
+neko\_nyaa, dipp, obront, cccz, WATCHPUG, 0xZakk, dic0de, adriro
 
 ## Summary
 
