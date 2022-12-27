@@ -45,6 +45,10 @@ balance = elapsedTime_ * tokenAmount_ / duration
 
 Fix PR: https://github.com/nounsDAO/streamer/pull/7
 
+**jack-the-pug**
+
+Fix confirmed!
+
 
 
 # Issue M-2: Lack of sanity check for `stoptime` 
@@ -52,7 +56,7 @@ Fix PR: https://github.com/nounsDAO/streamer/pull/7
 Source: https://github.com/sherlock-audit/2022-11-nounsdao-judging/issues/66 
 
 ## Found by 
-hansfriese, jonatascm, rvierdiiev, WATCHPUG, pashov, ctf\_sec, csanuragjain, chainNue
+rvierdiiev, pashov, jonatascm, WATCHPUG, chainNue, csanuragjain, hansfriese, ctf\_sec
 
 ## Summary
 
@@ -118,6 +122,10 @@ function createStream(
 
 Fix PR: https://github.com/nounsDAO/streamer/pull/8
 
+**jack-the-pug**
+
+Fix confirmed!
+
 
 
 # Issue M-3: The rather harsh requirement of `tokenAmount` makes it inapplicable for certain tokens 
@@ -125,7 +133,7 @@ Fix PR: https://github.com/nounsDAO/streamer/pull/8
 Source: https://github.com/sherlock-audit/2022-11-nounsdao-judging/issues/63 
 
 ## Found by 
-WATCHPUG, rvierdiiev
+rvierdiiev, WATCHPUG
 
 ## Summary
 
@@ -161,6 +169,12 @@ Consider changing to `tokenAmount * RATE_DECIMALS_MULTIPLIER >= stopTime - start
 
 Fix PR: https://github.com/nounsDAO/streamer/pull/12
 
+**jack-the-pug**
+
+Fix confirmed! 
+
+Notice: The fix should be merged together with https://github.com/nounsDAO/streamer/pull/7, otherwise, `ratePerSecond()` can be `0`.
+
 
 
 # Issue M-4: Two address tokens can be withdrawn by the payer even when the stream has began 
@@ -168,7 +182,7 @@ Fix PR: https://github.com/nounsDAO/streamer/pull/12
 Source: https://github.com/sherlock-audit/2022-11-nounsdao-judging/issues/52 
 
 ## Found by 
-DecorativePineapple, hansfriese, pashov, rvierdiiev
+DecorativePineapple, rvierdiiev, hansfriese, pashov
 
 ## Summary
 It has been identified that if a stream has begun with a two address token the payer can withdraw the full amount via the [`rescueERC20`](https://github.com/sherlock-audit/2022-11-nounsdao/blob/main/src/Stream.sol#L268-L272) function.
@@ -194,6 +208,20 @@ Manual Review
 
 ## Recommendation
 Replace the address check with a balance check - record the balance of the token that's deposited in the stream before and after the transfer and assert that they are equal.
+
+## Discussion
+
+**eladmallel**
+
+Fix PR: https://github.com/nounsDAO/streamer/pull/6
+
+The PR fixes multiple issues because they were touching the same code.
+
+**jack-the-pug**
+
+Fix confirmed!
+
+
 
 # Issue M-5: The ````Stream```` contract is designed to receive ETH but not implement function for withdrawal 
 
@@ -255,6 +283,10 @@ Add a ````rescueETH()```` function which is similar with the existing ````rescue
 
 Fix PR: https://github.com/nounsDAO/streamer/pull/10
 
+**jack-the-pug**
+
+Fix confirmed!
+
 
 
 # Issue M-6: If the recipient is added to the USDC blacklist, then cancel() does not work 
@@ -262,7 +294,7 @@ Fix PR: https://github.com/nounsDAO/streamer/pull/10
 Source: https://github.com/sherlock-audit/2022-11-nounsdao-judging/issues/37 
 
 ## Found by 
-Zarf, joestakey, cccz, bin2chen
+Zarf, cccz, bin2chen, joestakey
 
 ## Summary
 cancel() will send the vested USDC to the recipient, if the recipient is added to the USDC blacklist, then cancel() will not work
@@ -296,12 +328,26 @@ Manual Review
 ## Recommendation
 Instead of sending tokens directly to the payer or recipient in cancel(), consider storing the number of tokens in variables and having the payer or recipient claim it later
 
+## Discussion
+
+**eladmallel**
+
+Fix PR: https://github.com/nounsDAO/streamer/pull/6
+
+The PR fixes multiple issues because they were touching the same code.
+
+**jack-the-pug**
+
+Fix confirmed!
+
+
+
 # Issue M-7: Payer cannot withdraw accidental extra funds sent to the contract without canceling 
 
 Source: https://github.com/sherlock-audit/2022-11-nounsdao-judging/issues/28 
 
 ## Found by 
-neko\_nyaa, dipp, obront, cccz, WATCHPUG, 0xZakk, dic0de, adriro
+0xZakk, dic0de, cccz, WATCHPUG, neko\_nyaa, adriro, dipp, obront
 
 ## Summary
 
@@ -339,4 +385,18 @@ function rescueERC20(address tokenAddress, uint256 amount) external onlyPayer {
     IERC20(tokenAddress).safeTransfer(msg.sender, amount);
 }
 ```
+
+## Discussion
+
+**eladmallel**
+
+Fix PR: https://github.com/nounsDAO/streamer/pull/6
+
+The PR fixes multiple issues because they were touching the same code.
+
+**jack-the-pug**
+
+Fix confirmed!
+
+
 
